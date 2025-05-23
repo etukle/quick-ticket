@@ -1,6 +1,7 @@
 'use client'
 
-import {useActionState} from "react";
+import {useActionState, useEffect} from "react";
+import {useRouter} from "next/navigation";
 import {createTicket} from "@/actions/ticket.action";
 
 const NewTicketPage = () => {
@@ -8,6 +9,16 @@ const NewTicketPage = () => {
         success: false,
         message: ''
     })
+
+    const router = useRouter()
+
+    useEffect(() => {
+
+        if (state.success) {
+            router.push('/tickets')
+        }
+
+    }, [state.success, router])
 
     return (
         <div className='min-h-screen bg-blue-50 flex items-center justify-center px-4'>
