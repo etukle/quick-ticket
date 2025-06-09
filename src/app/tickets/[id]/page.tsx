@@ -1,13 +1,14 @@
-import { logEvent } from "@/utils/sentry";
+import {logEvent} from "@/utils/sentry";
 import {getPriorityClass} from "@/utils/ui";
 import Link from "next/link";
-import{ notFound } from "next/navigation";
+import {notFound} from "next/navigation";
 import {getTicketById} from "@/actions/ticket.action";
+import CloseTicketButton from "@/components/CloseTicketButton";
 
 const TicketDetailsPage = async (props: {
-    params: Promise<{id: string}>
+    params: Promise<{ id: string }>
 }) => {
-    const { id } = await props.params;
+    const {id} = await props.params;
     const ticket = await getTicketById(id)
 
     if (!ticket) {
@@ -41,7 +42,13 @@ const TicketDetailsPage = async (props: {
                     <p>{new Date(ticket.createdAt).toLocaleDateString()}</p>
                 </div>
 
-                <Link href='/tickets' className='inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition'>← Back to Tickets</Link>
+                <Link href='/tickets'
+                      className='inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition'>←
+                    Back to Tickets</Link>
+
+                {ticket.status !== 'Closed' && (
+                    <CloseTicketButton ticketId={ticket.id} isClosed={ticket.status === 'Closed'}/>
+                )}
             </div>
         </div>
     );
